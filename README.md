@@ -9,7 +9,6 @@ Use this repository to quickly run Airflow, using a local executor, with CWL-Air
   - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
-- [License](#license)
   - [Executor](#exectutor)
 
 
