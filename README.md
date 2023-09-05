@@ -8,8 +8,9 @@ Use this repository to quickly run Airflow, using a local executor, with CWL-Air
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
+- [Configuration](#configuration)
 - [License](#license)
+  - [Executor](#exectutor)
 
 
 
@@ -61,3 +62,10 @@ After installation, to use Airflow with CWL, follow these simple steps.
     }
   }
 ```
+
+## Configuration
+
+### Executor
+
+This configuration uses a "Local Executor" instead of other executor options. There are configuration options to update the Executor used. Review the documentation [here](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/index.html). *Note: to use other executors, more containers (like reddis and worker) may be nescessary. For future deployments in Kubernetes, for example, Kubernetes or Celery Executors are most likely preferred.
+
