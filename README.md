@@ -1,10 +1,9 @@
-# Project Name
+# CWL Airflow with Docker Compose
 
-A brief description
+Use this repository to quickly run Airflow, using a local executor, with CWL-Airflow. The Dockerfile extension adds CWL-Airflow to Airflow (2.1.4).
 
 ## Table of Contents
 
-- [Introduction](#introduction)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -12,20 +11,43 @@ A brief description
 - [Contributing](#contributing)
 - [License](#license)
 
-## Introduction
-
-Provide a concise introduction to your project. Explain what it does and why it's valuable or interesting.
 
 
 ## Getting Started
 
-Explain how to get started with your project, including any prerequisites and installation instructions.
+
+
 
 ### Prerequisites
 
-List any software, libraries, or dependencies that users need to install before using your project.
+Clone this repository to your local machine where Python 3.8.10 is installed. Additionally, make sure Docker and Docker Compose are downloaded and ready to use.
+
+### Installation
+
+To start the containers, use the following command below.
 
 ```bash
-# Example of installing a prerequisite package with a package manager
-npm install some-package
+docker compose up --build
 
+
+## Usage
+
+After installation, to use Airflow with CWL, follow these simple steps.
+1. Add your dag to the ./dag folder in your directory.
+2. Use the following my_dag.py format to import your workflow
+```bash
+#!/usr/bin/env python3
+from cwl_airflow.extensions.cwldag import CWLDAG
+dag = CWLDAG(
+    workflow="./dags/workflow.cwl",
+    dag_id="my_dag_name"
+)
+Now, the dag should automatically load this dag into DAGs (next to clean_dag_run.py)
+3. From the UI, hit the "trigger dag w/ config" button. This will take you to an optional .json prompt. Here, make sure to specify the "job" that occampanies the CWL file you are running.
+- - example of .json "job" specification
+```bash
+{
+"job":{
+  "message": "hello"
+  }
+}
