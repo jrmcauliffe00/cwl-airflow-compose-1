@@ -37,6 +37,8 @@ docker compose up --build
 After installation, to use Airflow with CWL, follow these simple steps.
 1. Add your dag to the ./dag folder in your directory.
 2. Use the following my_dag.py format to import your workflow
+
+
 </pre>
 ```bash
 #!/usr/bin/env python3
@@ -45,12 +47,16 @@ dag = CWLDAG(
     workflow="./dags/workflow.cwl",
     dag_id="my_dag_name"
 )
+# Now, the dag should automatically load this dag into DAGs (next to clean_dag_run.py)
 ```
 </pre>
-Now, the dag should automatically load this dag into DAGs (next to clean_dag_run.py)
+
+
 3. From the UI, hit the "trigger dag w/ config" button. This will take you to an optional .json prompt. Here, make sure to specify the "job" that occampanies the CWL file you are running.
-- example of .json "job" specification
+
+
 </pre>
+# example of .json "job" specification
 ```json
 {
 "job":{
