@@ -39,29 +39,29 @@ After installation, to use Airflow with CWL, follow these simple steps.
 2. Use the following my_dag.py format to import your workflow
 
 
-</pre>
-```bash
-#!/usr/bin/env python3
-from cwl_airflow.extensions.cwldag import CWLDAG
-dag = CWLDAG(
-    workflow="./dags/workflow.cwl",
-    dag_id="my_dag_name"
-)
-# Now, the dag should automatically load this dag into DAGs (next to clean_dag_run.py)
-```
-</pre>
+  </pre>
+  ```bash
+  #!/usr/bin/env python3
+  from cwl_airflow.extensions.cwldag import CWLDAG
+  dag = CWLDAG(
+      workflow="./dags/workflow.cwl",
+      dag_id="my_dag_name"
+  )
+  # Now, the dag should automatically load this dag into DAGs (next to clean_dag_run.py)
+  ```
+  </pre>
 
 
 3. From the UI, hit the "trigger dag w/ config" button. This will take you to an optional .json prompt. Here, make sure to specify the "job" that occampanies the CWL file you are running.
 
 
-</pre>
-# example of .json "job" specification
-```json
-{
-"job":{
-  "message": "hello"
+  </pre>
+  # example of .json "job" specification
+  ```json
+  {
+  "job":{
+    "message": "hello"
+    }
   }
-}
 ```
 </pre>
