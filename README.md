@@ -28,6 +28,7 @@ To start the containers, use the following command below.
 
 ```bash
 docker compose up --build
+```
 
 
 ## Usage
@@ -42,12 +43,14 @@ dag = CWLDAG(
     workflow="./dags/workflow.cwl",
     dag_id="my_dag_name"
 )
+```
 Now, the dag should automatically load this dag into DAGs (next to clean_dag_run.py)
 3. From the UI, hit the "trigger dag w/ config" button. This will take you to an optional .json prompt. Here, make sure to specify the "job" that occampanies the CWL file you are running.
 - - example of .json "job" specification
-```bash
+```json
 {
 "job":{
   "message": "hello"
   }
 }
+```
