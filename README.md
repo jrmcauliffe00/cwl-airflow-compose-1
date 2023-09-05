@@ -72,4 +72,4 @@ This configuration uses a "Local Executor" instead of other executor options. Th
 
 ### airflow cfg
 
-This file is included in the repository as a point of reference. No changes need to added to this file. Chnanges to airflow configuration will happen at the Docker Compose level. See under "airflow-common-env" section of [docker-compose file](/docker-compose.yaml) for some changes being made to airflow configuration.
+This file is included in the repository as a point of reference. No changes need to be added to this file. Changes to airflow configuration will happen at the Docker Compose level. See under "airflow-common-env" section of [docker-compose file](/docker-compose.yaml) where some changes are made to airflow configuration.
