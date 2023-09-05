@@ -48,7 +48,6 @@ dag = CWLDAG(
 ```
 </pre>
 Now, the dag should automatically load this dag into DAGs (next to clean_dag_run.py)
-
 3. From the UI, hit the "trigger dag w/ config" button. This will take you to an optional .json prompt. Here, make sure to specify the "job" that occampanies the CWL file you are running.
 - example of .json "job" specification
 </pre>
