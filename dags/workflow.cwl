@@ -16,8 +16,11 @@ steps:
   echo:
     run:
       class: CommandLineTool
+
       baseCommand: echo
+
       stdout: output.txt
+
       inputs:
         message:
           type: string
@@ -35,16 +38,17 @@ steps:
   uppercase:
     run:
       class: ExpressionTool
+
+      requirements:
+        InlineJavascriptRequirement: {}
+
       inputs:
         message: string
       outputs:
         uppercase_message: string
+
       expression: |
-        ${
-          message = inputs["message"]
-          uppercase_message = message.toUpperCase()
-          return {"uppercase_message": uppercase_message}
-        }
+        ${ return {"uppercase_message": inputs.message.toUpperCase()}; }
     in:
       message:
         source: echo/out
