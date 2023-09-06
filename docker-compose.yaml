@@ -50,18 +50,21 @@ x-airflow-common:
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    PROCESS_REPORT_URL: ''
     AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
-    AIRFLOW__CORE__BASE_LOG_FOLDER=: /opt/airflow/logs
-    AIRFLOW__CORE__DAG_PROCESSOR_MANAGER_LOG_LOCATION: /opt/airflow/logs/dag_processor_manager/dag_processor_manager.log
+    AIRFLOW__LOGGING__BASE_LOG_FOLDER: /opt/airflow/logs
+    AIRFLOW__LOGGING__DAG_PROCESSOR_MANAGER_LOG_LOCATION: /opt/airflow/logs/dag_processor_manager/dag_processor_manager.log
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'false'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
-    AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
     AIRFLOW__SCHEDULER__CHILD_PROCESS_LOG_DIRECTORY: /opt/airflow/logs/scheduler
-    AIRFLOW__DAGBAG__IMPORT__TIMEOUT: 120
-
-
+    AIRFLOW__WEBSERVER__SECRET_KEY: '/cFYDLgDAzik91pYgpsFjg=='
+    AIRFLOW__LOGGING__LOG_FETCH_TIMEOUT_SEC: '15'
+    AIRFLOW__CORE__DEFAULT_TIMEZONE: 'system'
+    AIRFLOW__WEBSERVER__DEFAULT_UI_TIMEZONE: 'system'
+    AIRFLOW__SCHEDULER__JOB_HEARTBEAT_SEC: '30'
+    
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
@@ -102,6 +105,14 @@ services:
       timeout: 10s
       retries: 5
     restart: always
+    volumes: 
+     - ./dags:/opt/airflow/dags
+     - ./logs:/opt/airflow/logs
+     - ./plugins:/opt/airflow/plugins
+     - ./cwl_tmp_folder:/opt/airflow/cwl_temp_folder
+     - ./cwl_inputs_folder:/opt/airflow/cwl_inputs_folder
+     - ./cwl_pickle_folder:/opt/airflow/cwl_pickle_folder
+     - ./cwl_outputs_folder:/opt/airflow/cwl_outputs_folder
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
@@ -116,6 +127,15 @@ services:
       timeout: 10s
       retries: 5
     restart: always
+    volumes: 
+     - /var/run/docker.sock:/var/run/docker.sock
+     - ./dags:/opt/airflow/dags
+     - ./logs:/opt/airflow/logs
+     - ./plugins:/opt/airflow/plugins
+     - ./cwl_tmp_folder:/opt/airflow/cwl_temp_folder
+     - ./cwl_inputs_folder:/opt/airflow/cwl_inputs_folder
+     - ./cwl_pickle_folder:/opt/airflow/cwl_pickle_folder
+     - ./cwl_outputs_folder:/opt/airflow/cwl_outputs_folder
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
