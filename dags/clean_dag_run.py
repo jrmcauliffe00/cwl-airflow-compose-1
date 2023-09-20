@@ -6,11 +6,8 @@ from cwl_airflow.utilities.cwl import clean_up_dag_run
 from cwl_airflow.utilities.report import dag_on_success, dag_on_failure
 
 
-def clean_dag_run(**context):
-    clean_up_dag_run(
-        dag_id=context["dag_run"].conf["remove_dag_id"],
-        run_id=context["dag_run"].conf["remove_run_id"]
-    )
+def clean_dag_run():
+    print('hi')
 
 
 dag = DAG(dag_id="clean_dag_run",
