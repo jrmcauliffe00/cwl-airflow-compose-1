@@ -51,7 +51,7 @@ x-airflow-common:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
     PROCESS_REPORT_URL: ''
-    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
     AIRFLOW__LOGGING__BASE_LOG_FOLDER: /opt/airflow/logs
     AIRFLOW__LOGGING__DAG_PROCESSOR_MANAGER_LOG_LOCATION: /opt/airflow/logs/dag_processor_manager/dag_processor_manager.log
@@ -63,9 +63,15 @@ x-airflow-common:
     AIRFLOW__LOGGING__LOG_FETCH_TIMEOUT_SEC: '15'
     AIRFLOW__CORE__DEFAULT_TIMEZONE: 'system'
     AIRFLOW__WEBSERVER__DEFAULT_UI_TIMEZONE: 'system'
-    AIRFLOW__SCHEDULER__JOB_HEARTBEAT_SEC: '30'
+    AIRFLOW__CORE__STRICT_TASK_ID_VALIDATION: 'false'
+    AIRFLOW__CORE__DEFAULT_TASK_EXECUTION_TIMEOUT: '10'
+    AIRFLOW__WEBSERVER__LOG_FETCH_TIMEOUT_SEC: '10'
+    
+    #     AIRFLOW__SCHEDULER__JOB_HEARTBEAT_SEC: '240'
+
     
   volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
@@ -121,6 +127,7 @@ services:
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
+    user: root
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
       interval: 10s
@@ -136,10 +143,13 @@ services:
      - ./cwl_inputs_folder:/opt/airflow/cwl_inputs_folder
      - ./cwl_pickle_folder:/opt/airflow/cwl_pickle_folder
      - ./cwl_outputs_folder:/opt/airflow/cwl_outputs_folder
+    privileged: true
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
         condition: service_completed_successfully
+
+# added privileged param to the scheduler container
 
   airflow-init:
     <<: *airflow-common
