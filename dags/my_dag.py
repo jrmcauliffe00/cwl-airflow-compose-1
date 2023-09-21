@@ -2,5 +2,5 @@
 from cwl_airflow.extensions.cwldag import CWLDAG
 dag = CWLDAG(
     workflow="./dags/workflow.cwl",
-    dag_id="my_dag_name"
+    dag_id="my_dag"
 )
