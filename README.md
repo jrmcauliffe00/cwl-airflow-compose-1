@@ -1,6 +1,6 @@
 # CWL Airflow with Docker Compose
 
-Use this repository to quickly run Airflow, using a local executor, with CWL-Airflow. The Dockerfile extension adds CWL-Airflow to Airflow (2.1.4).
+Use this repository to quickly run Airflow, using a local executor, with CWL-Airflow. The Dockerfile extension adds CWL-Airflow to Airflow (2.7.1).
 
 ## Table of Contents
 
