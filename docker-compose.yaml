@@ -74,11 +74,12 @@ x-airflow-common:
     - ./dags:${AIRFLOW_HOME}/dags
     - ./logs:${AIRFLOW_HOME}/logs
     - ./plugins:${AIRFLOW_HOME}/plugins
-    - ./cwl_tmp_folder:${AIRFLOW_HOME}/cwl_temp_folder
+    - ./cwl_tmp_folder:${AIRFLOW_HOME}/cwl_tmp_folder
     - ./cwl_inputs_folder:${AIRFLOW_HOME}/cwl_inputs_folder
     - ./cwl_pickle_folder:${AIRFLOW_HOME}/cwl_pickle_folder
     - ./cwl_outputs_folder:${AIRFLOW_HOME}/cwl_outputs_folder
-  user: root
+    - /tmp:/tmp
+  user: ${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-50000}
   depends_on:
     &airflow-common-depends-on
     postgres:
@@ -115,7 +116,7 @@ services:
      - ./dags:${AIRFLOW_HOME}/dags
      - ./logs:${AIRFLOW_HOME}/logs
      - ./plugins:${AIRFLOW_HOME}/plugins
-     - ./cwl_tmp_folder:${AIRFLOW_HOME}/cwl_temp_folder
+     - ./cwl_tmp_folder:${AIRFLOW_HOME}/cwl_tmp_folder
      - ./cwl_inputs_folder:${AIRFLOW_HOME}/cwl_inputs_folder
      - ./cwl_pickle_folder:${AIRFLOW_HOME}/cwl_pickle_folder
      - ./cwl_outputs_folder:${AIRFLOW_HOME}/cwl_outputs_folder
@@ -139,7 +140,7 @@ services:
      - ./dags:${AIRFLOW_HOME}/dags
      - ./logs:${AIRFLOW_HOME}/logs
      - ./plugins:${AIRFLOW_HOME}/plugins
-     - ./cwl_tmp_folder:${AIRFLOW_HOME}/cwl_temp_folder
+     - ./cwl_tmp_folder:${AIRFLOW_HOME}/cwl_tmp_folder
      - ./cwl_inputs_folder:${AIRFLOW_HOME}/cwl_inputs_folder
      - ./cwl_pickle_folder:${AIRFLOW_HOME}/cwl_pickle_folder
      - ./cwl_outputs_folder:${AIRFLOW_HOME}/cwl_outputs_folder
