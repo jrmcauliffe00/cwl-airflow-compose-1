@@ -1,6 +1,8 @@
 # Use the Apache Airflow base image with Python 3.8
 FROM apache/airflow:2.7.1-python3.8
 
+WORKDIR /tmp
+
 USER root
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
