@@ -10,8 +10,6 @@ RUN apt-get update \
          software-properties-common \
          git nodejs
 
-
-USER airflow
 # Install CWL-Airflow and Apache Airflow
 RUN pip3 install git+https://github.com/Barski-lab/cwl-airflow.git
 RUN pip3 install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}"

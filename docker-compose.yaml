@@ -49,16 +49,17 @@ x-airflow-common:
     dockerfile: ./Dockerfile
   environment:
     &airflow-common-env
+    AIRFLOW_HOME: ${AIRFLOW_HOME}/
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
     PROCESS_REPORT_URL: ''
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
-    AIRFLOW__LOGGING__BASE_LOG_FOLDER: /opt/airflow/logs
-    AIRFLOW__LOGGING__DAG_PROCESSOR_MANAGER_LOG_LOCATION: /opt/airflow/logs/dag_processor_manager/dag_processor_manager.log
+    AIRFLOW__LOGGING__BASE_LOG_FOLDER: ${AIRFLOW_HOME}/logs
+    AIRFLOW__LOGGING__DAG_PROCESSOR_MANAGER_LOG_LOCATION: ${AIRFLOW_HOME}/logs/dag_processor_manager/dag_processor_manager.log
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'false'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
-    AIRFLOW__SCHEDULER__CHILD_PROCESS_LOG_DIRECTORY: /opt/airflow/logs/scheduler
+    AIRFLOW__SCHEDULER__CHILD_PROCESS_LOG_DIRECTORY: ${AIRFLOW_HOME}/logs/scheduler
     AIRFLOW__WEBSERVER__SECRET_KEY: '/cFYDLgDAzik91pYgpsFjg=='
     AIRFLOW__LOGGING__LOG_FETCH_TIMEOUT_SEC: '15'
     AIRFLOW__CORE__DEFAULT_TIMEZONE: 'system'
@@ -68,18 +69,16 @@ x-airflow-common:
     AIRFLOW__WEBSERVER__LOG_FETCH_TIMEOUT_SEC: '10'
     
     #     AIRFLOW__SCHEDULER__JOB_HEARTBEAT_SEC: '240'
-
-    
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
-    - ./dags:/opt/airflow/dags
-    - ./logs:/opt/airflow/logs
-    - ./plugins:/opt/airflow/plugins
-    - ./cwl_tmp_folder:/opt/airflow/cwl_temp_folder
-    - ./cwl_inputs_folder:/opt/airflow/cwl_inputs_folder
-    - ./cwl_pickle_folder:/opt/airflow/cwl_pickle_folder
-    - ./cwl_outputs_folder:/opt/airflow/cwl_outputs_folder
-  user: "${AIRFLOW_UID:-50000}:${AIRFLOW_GID:-0}"
+    - ./dags:${AIRFLOW_HOME}/dags
+    - ./logs:${AIRFLOW_HOME}/logs
+    - ./plugins:${AIRFLOW_HOME}/plugins
+    - ./cwl_tmp_folder:${AIRFLOW_HOME}/cwl_temp_folder
+    - ./cwl_inputs_folder:${AIRFLOW_HOME}/cwl_inputs_folder
+    - ./cwl_pickle_folder:${AIRFLOW_HOME}/cwl_pickle_folder
+    - ./cwl_outputs_folder:${AIRFLOW_HOME}/cwl_outputs_folder
+  user: root
   depends_on:
     &airflow-common-depends-on
     postgres:
@@ -103,6 +102,7 @@ services:
   airflow-webserver:
     <<: *airflow-common
     command: webserver
+    user: root
     ports:
       - 8080:8080
     healthcheck:
@@ -112,13 +112,13 @@ services:
       retries: 5
     restart: always
     volumes: 
-     - ./dags:/opt/airflow/dags
-     - ./logs:/opt/airflow/logs
-     - ./plugins:/opt/airflow/plugins
-     - ./cwl_tmp_folder:/opt/airflow/cwl_temp_folder
-     - ./cwl_inputs_folder:/opt/airflow/cwl_inputs_folder
-     - ./cwl_pickle_folder:/opt/airflow/cwl_pickle_folder
-     - ./cwl_outputs_folder:/opt/airflow/cwl_outputs_folder
+     - ./dags:${AIRFLOW_HOME}/dags
+     - ./logs:${AIRFLOW_HOME}/logs
+     - ./plugins:${AIRFLOW_HOME}/plugins
+     - ./cwl_tmp_folder:${AIRFLOW_HOME}/cwl_temp_folder
+     - ./cwl_inputs_folder:${AIRFLOW_HOME}/cwl_inputs_folder
+     - ./cwl_pickle_folder:${AIRFLOW_HOME}/cwl_pickle_folder
+     - ./cwl_outputs_folder:${AIRFLOW_HOME}/cwl_outputs_folder
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
@@ -136,13 +136,13 @@ services:
     restart: always
     volumes: 
      - /var/run/docker.sock:/var/run/docker.sock
-     - ./dags:/opt/airflow/dags
-     - ./logs:/opt/airflow/logs
-     - ./plugins:/opt/airflow/plugins
-     - ./cwl_tmp_folder:/opt/airflow/cwl_temp_folder
-     - ./cwl_inputs_folder:/opt/airflow/cwl_inputs_folder
-     - ./cwl_pickle_folder:/opt/airflow/cwl_pickle_folder
-     - ./cwl_outputs_folder:/opt/airflow/cwl_outputs_folder
+     - ./dags:${AIRFLOW_HOME}/dags
+     - ./logs:${AIRFLOW_HOME}/logs
+     - ./plugins:${AIRFLOW_HOME}/plugins
+     - ./cwl_tmp_folder:${AIRFLOW_HOME}/cwl_temp_folder
+     - ./cwl_inputs_folder:${AIRFLOW_HOME}/cwl_inputs_folder
+     - ./cwl_pickle_folder:${AIRFLOW_HOME}/cwl_pickle_folder
+     - ./cwl_outputs_folder:${AIRFLOW_HOME}/cwl_outputs_folder
     privileged: true
     depends_on:
       <<: *airflow-common-depends-on
@@ -161,17 +161,6 @@ services:
         function ver() {
           printf "%04d%04d%04d%04d" $${1//./ }
         }
-        airflow_version=$$(gosu airflow airflow version)
-        airflow_version_comparable=$$(ver $${airflow_version})
-        min_airflow_version=2.1.0
-        min_airflow_version_comparable=$$(ver $${min_airflow_version})
-        if (( airflow_version_comparable < min_airflow_version_comparable )); then
-          echo
-          echo -e "\033[1;31mERROR!!!: Too old Airflow version $${airflow_version}!\e[0m"
-          echo "The minimum Airflow version supported: $${min_airflow_version}. Only use this or higher!"
-          echo
-          exit 1
-        fi
         if [[ -z "${AIRFLOW_UID}" ]]; then
           echo
           echo -e "\033[1;33mWARNING!!!: AIRFLOW_UID not set!\e[0m"
