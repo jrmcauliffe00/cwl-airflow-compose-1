@@ -16,7 +16,7 @@ dag = DAG(
 )
 run_this = TriggerDagRunOperator(
         task_id="tdro",
-        trigger_dag_id="my_dag",
+        trigger_dag_id="docker_busybox",
         dag=dag,
         conf={"job":{"message": "hello"}}
     )

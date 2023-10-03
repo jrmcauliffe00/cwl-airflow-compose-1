@@ -21,7 +21,7 @@ Use this repository to quickly run Airflow, using a local executor, with CWL-Air
 
 ### Prerequisites
 
-Clone this repository to your local machine where Python 3.8.10 is installed. Additionally, make sure Docker and Docker Compose are downloaded and ready to use.
+Clone this repository to your local machine where Python 3.8.10 is installed. Additionally, make sure Docker and Docker Compose are downloaded and ready to use. Specifying cwltool and Airflow versions can be done at runtime. [Dockerfile]{./Dockerfile} is used as a basis for this Docker Compose environment (the extended image used include CWL-Airflow and node.js).
 
 ### Installation
 
@@ -44,32 +44,26 @@ After installation, to use Airflow with CWL, follow these simple steps.
   #!/usr/bin/env python3
   from cwl_airflow.extensions.cwldag import CWLDAG
   dag = CWLDAG(
-      workflow="./dags/workflow.cwl",
+      workflow="./dags/workflows/workflow.cwl",
       dag_id="my_dag_name"
   )
-  # Now, the dag should automatically load this dag into DAGs (next to clean_dag_run.py)
+  # Now, the scheduler should automatically load this dag into the ./dags folder (next to clean_dag_run.py)
   ```
 
 
-3. From the UI, hit the "trigger dag w/ config" button. This will take you to an optional .json prompt. Here, make sure to specify the "job" that occampanies the CWL file you are running.
-
-
+3. Included in ./dags is a python file that utilizes the TriggerDagRunOperator to trigger another DAG in the same directory. Using this python file, you can pass configuration parameters in a .json format. More details about the TriggerDagRunOperator [here]{https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/trigger_dagrun/index.html}.
   
   ```
-  {
-  "job":{
-    "message": "hello"
-    }
-  }
-```
+  {"job":{"message": "hello"}}
+ ```
 
 ## Configuration
 
 ### Executor
 
-This configuration uses a "Local Executor" instead of other executor options. There are options to update the Executor used. Review the documentation [here](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/index.html). *Note: to use other executors, more containers (like reddis and worker) may be nescessary. For future deployments in Kubernetes, for example, Kubernetes or Celery Executors are most likely preferred.
+This configuration uses a "Local Executor".
 
 
 ### airflow cfg
 
-This file is included in the repository as a point of reference. No changes need to be added to this file. Changes to airflow configuration will happen at the Docker Compose level. See under "airflow-common-env" section of [docker-compose file](/docker-compose.yaml) where some changes are made to airflow configuration.
+This file is included in the repository as a point of reference. No changes need to be added to this file. Changes to airflow configuration will happen in the Docker-Compose yml. See under "airflow-common-env" section of [docker-compose file](/docker-compose.yaml) where some changes are made to airflow configuration.
