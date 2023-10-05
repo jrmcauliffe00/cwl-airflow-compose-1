@@ -21,7 +21,10 @@ Use this repository to quickly run Airflow, using a local executor, with CWL-Air
 
 ### Prerequisites
 
-Clone this repository to your local machine where Python 3.8.10 is installed. Additionally, make sure Docker and Docker Compose are downloaded and ready to use. Specifying cwltool and Airflow versions can be done at runtime. [Dockerfile]{./Dockerfile} is used as a basis for this Docker Compose environment (the extended image used include CWL-Airflow and node.js).
+Clone this repository to your local machine where Python 3.8.10 is installed. Additionally, make sure Docker and Docker Compose are downloaded and ready to use. Specifying cwltool and Airflow versions can be done at runtime. [Dockerfile](./Dockerfile) is used as a basis for this Docker Compose environment (the extended image used include CWL-Airflow and node.js).
+
+Additionally, the shared volumes must be saved in the same directory path inside the containers as on the host machine. Navigate to [.env](./.env) to specify the path to your Airflow home. Use your working directory absolute path.
+
 
 ### Installation
 
@@ -51,7 +54,7 @@ After installation, to use Airflow with CWL, follow these simple steps.
   ```
 
 
-3. Included in ./dags is a python file that utilizes the TriggerDagRunOperator to trigger another DAG in the same directory. Using this python file, you can pass configuration parameters in a .json format. More details about the TriggerDagRunOperator [here]{https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/trigger_dagrun/index.html}.
+3. Included in ./dags is a python file that utilizes the TriggerDagRunOperator to trigger another DAG in the same directory. Using this python file, you can pass configuration parameters in a .json format. More details about the TriggerDagRunOperator [here](https://airflow.apache.org/docs/apache-airflow/stable/_api/airflow/operators/trigger_dagrun/index.html).
   
   ```
   {"job":{"message": "hello"}}
