@@ -70,3 +70,13 @@ This configuration uses a "Local Executor".
 ### airflow cfg
 
 This file is included in the repository as a point of reference. No changes need to be added to this file. Changes to airflow configuration will happen in the Docker-Compose yml. See under "airflow-common-env" section of [docker-compose file](/docker-compose.yaml) where some changes are made to airflow configuration.
+
+
+
+## Errors and Solutions
+
+| Error Description                                   | Solution                                           |
+|-----------------------------------------------------|---------------------------------------------------|
+| “docker” Command not found                          | Restart containers using correct base image—docker-cli is included in latest Airflow base image  |
+| Broken DAG                                          | Likely syntax error in .cwl workflow—check cwlVersion specification                         |
+| Scheduler not running (Airflow error)               | Check scheduler container status—typically can be solved with restart |
