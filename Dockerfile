@@ -12,6 +12,11 @@ RUN apt-get update \
          software-properties-common \
          git nodejs
 
-# Install CWL-Airflow and Apache Airflow
-RUN pip3 install git+https://github.com/Barski-lab/cwl-airflow.git
+RUN pip3 install git+https://github.com/jrmcauliffe00/cwl-airflow.git
 RUN pip3 install --no-cache-dir "apache-airflow==${AIRFLOW_VERSION}"
+
+COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x /entrypoint.sh
+
+RUN pip3 install psycopg2-binary

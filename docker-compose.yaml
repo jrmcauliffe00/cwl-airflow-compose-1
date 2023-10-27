@@ -150,7 +150,30 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
-# added privileged param to the scheduler container
+  cwl-airflow:
+      <<: *airflow-common
+      command: ["cwl-airflow", "api", "--replay", "60", "--host", "0.0.0.0"]
+      depends_on:
+        <<: *airflow-common-depends-on
+      volumes:
+        - ./dags:${AIRFLOW_HOME}/dags
+        - ./logs:${AIRFLOW_HOME}/logs
+        - ./plugins:${AIRFLOW_HOME}/plugins
+        - ./cwl_tmp_folder:${AIRFLOW_HOME}/cwl_tmp_folder
+        - ./cwl_inputs_folder:${AIRFLOW_HOME}/cwl_inputs_folder
+        - ./cwl_pickle_folder:${AIRFLOW_HOME}/cwl_pickle_folder
+        - ./cwl_outputs_folder:${AIRFLOW_HOME}/cwl_outputs_folder
+        - /tmp:/tmp
+      user: root
+      healthcheck:
+        test: ["CMD", "curl", "--fail", "http://localhost:8081/health"]
+        interval: 30s
+        timeout: 10s
+        retries: 3
+      restart: always
+      entrypoint: /entrypoint.sh
+      ports:
+        - 8081:8081
 
   airflow-init:
     <<: *airflow-common
@@ -214,22 +237,9 @@ services:
       _AIRFLOW_WWW_USER_CREATE: 'true'
       _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
       _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
-    user: "0:0"
+    user: root
     volumes:
       - .:/sources
-
-  airflow-cli:
-    <<: *airflow-common
-    profiles:
-      - debug
-    environment:
-      <<: *airflow-common-env
-      CONNECTION_CHECK_MAX_COUNT: "0"
-    # Workaround for entrypoint issue. See: https://github.com/apache/airflow/issues/16252
-    command:
-      - bash
-      - -c
-      - airflow
 
 volumes:
   postgres-db-volume:
