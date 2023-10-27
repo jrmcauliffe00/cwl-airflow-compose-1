@@ -150,7 +150,7 @@ services:
       airflow-init:
         condition: service_completed_successfully
 
-  cwl-airflow:
+  cwl-airflow-api:
       <<: *airflow-common
       command: ["cwl-airflow", "api", "--replay", "60", "--host", "0.0.0.0"]
       depends_on:
