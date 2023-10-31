@@ -5,7 +5,6 @@ app = FastAPI()
 
 @app.get("/call_external_api")
 async def call_external_api(
-# variables that will be passed to this endpoint
     dag_id: str = Query(..., embeded=True),
     run_id: str = Query(..., embeded=True),
     workflow_path: str = Query(..., embeded=True),
@@ -24,16 +23,13 @@ async def call_external_api(
     }
 
     try:
-        # Make a POST request to the external API with data and headers
         response = requests.post(external_api_url, data=data, headers=headers)
 
 
-        # Check if the request was successful (status code 200)
         if response.status_code == 200:
             # Parse the response data as needed
             external_data = response.json()
 
-            # You can now use the external data in your application or return it as a response
             return {"external_data": external_data}
         else:
             return {"error": "Failed to retrieve data from the external API"}
