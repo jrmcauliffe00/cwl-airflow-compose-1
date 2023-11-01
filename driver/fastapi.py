@@ -4,7 +4,7 @@ import requests
 app = FastAPI()
 
 @app.post("/upload")
-async def call_external_api(
+async def upload(
 # Variables that will be passed to this endpoint
     dag_id: str = Query(..., embeded=True),
     run_id: str = Query(..., embeded=True),
@@ -40,7 +40,7 @@ async def call_external_api(
 
 
 @app.get("/logs")
-async def call_external_api():
+async def logs():
     external_api_url = f"http://localhost:8081/api/experimental/dags"
 
     try:
