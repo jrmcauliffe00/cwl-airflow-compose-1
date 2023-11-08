@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, Body, Query
 from fastapi.responses import JSONResponse
-import os, requests
+import os, requests, json, yaml
 
 app = FastAPI()
 
@@ -20,6 +20,14 @@ dag = CWLDAG(
         f.write(python_code)
 
 
+def json_to_yaml(json_filename, yaml_filename):
+    with open(json_filename, 'r') as json_file:
+        data = json.load(json_file)
+
+    with open(yaml_filename, 'w') as yaml_file:
+        yaml.dump(data, yaml_file, default_flow_style=False)
+
+
 @app.post("/upload/")
 async def upload_files(
     dag_id: str = Body(..., description="dag id to identify"), 
@@ -28,7 +36,9 @@ async def upload_files(
 
     create_python_file(upload_folder, dag_id=dag_id)
 
-    workflow_file_path = os.path.join(upload_folder, workflow_file.filename)
+    new_workflow_filename = workflow_file.filename.replace(".yml", ".cwl")
+
+    workflow_file_path = os.path.join(upload_folder, new_workflow_filename)
 
     with open(workflow_file_path, "wb") as f:
         f.write(workflow_file.file.read())
