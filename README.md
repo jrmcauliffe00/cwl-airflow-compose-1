@@ -80,16 +80,16 @@ See [driver](/driver.py) for native proxy API. This API will accept .yml or .cwl
 
 - POST /upload
   - dag_id
-    -str, Body
+    - str, Body
   - workflow_file
     - file upload
 - POST /trigger
   - dag_id
-    -str, Query
+    - str, Query
   - conf
-    -str, Query
+    - str, Query
   - run_id
-    -str, Query
+    - str, Query
 - GET /logs
 
 
