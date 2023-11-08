@@ -4,13 +4,13 @@ import os, requests, json, yaml
 
 app = FastAPI()
 
-upload_folder = "/Users/john.mcauliffe/Documents/oct_23/cwl-airflow-compose-1/dags"
+upload_folder = "/path/to/dags"
 
 def create_python_file(upload_folder, dag_id):
     python_code = '''#!/usr/bin/env python3
 from cwl_airflow.extensions.cwldag import CWLDAG
 dag = CWLDAG(
-    workflow="/Users/john.mcauliffe/Documents/oct_23/cwl-airflow-compose-1/dags/{}.cwl",
+    workflow="/path/to/dags/{}.cwl",
     dag_id="{}"
 )
 '''.format(dag_id, dag_id)
