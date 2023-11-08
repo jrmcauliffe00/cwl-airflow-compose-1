@@ -11,6 +11,7 @@ Use this repository to quickly run Airflow, using a local executor, with CWL-Air
 - [Configuration](#configuration)
   - [Executor](#executor)
   - [airflow cfg](#airflow-cfg)
+-[API](#API)
 
 
 
@@ -71,6 +72,25 @@ This configuration uses a "Local Executor".
 
 This file is included in the repository as a point of reference. No changes need to be added to this file. Changes to airflow configuration will happen in the Docker-Compose yml. See under "airflow-common-env" section of [docker-compose file](/docker-compose.yaml) where some changes are made to airflow configuration.
 
+## API
+
+CWL-Airflow's API will start at runtime in cwl-airflow-api container. Port configuration can be managed inside of [docker-compose file](/docker-compose.yaml).
+
+See [driver](/driver.py) for native proxy API. This API will accept .yml or .cwl formatted workflows and create accompanying python files with custom "dag_id" identifier. Routes include:
+
+- POST /upload
+  - dag_id
+    -str, Body
+  - workflow_file
+    - file upload
+- POST /trigger
+  - dag_id
+    -str, Query
+  - conf
+    -str, Query
+  - run_id
+    -str, Query
+- GET /logs
 
 
 ## Errors and Solutions
