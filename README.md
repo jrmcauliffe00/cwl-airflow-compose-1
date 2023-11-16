@@ -11,7 +11,8 @@ Use this repository to quickly run Airflow, using a local executor, with CWL-Air
 - [Configuration](#configuration)
   - [Executor](#executor)
   - [airflow cfg](#airflow-cfg)
--[API](#API)
+- [API](#API)
+  - [base urls](#base-urls)
 
 
 
@@ -92,6 +93,10 @@ See [driver](/driver.py) for native proxy API. This API will accept .yml or .cwl
     - str, Query
 - GET /logs
 
+### base urls
+
+CWL-Airflow's API uses the base URL http://localhost:8081/api/experimental
+FastAPI base URL http://localhost:8000
 
 ## Errors and Solutions
 
